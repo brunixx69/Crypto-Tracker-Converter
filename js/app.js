@@ -125,22 +125,34 @@ const setupEventListeners = () => {
     themeToggle.addEventListener('click', toggleTheme);
     retryBtn.addEventListener('click', initAppData);
 
-    // Crypto Grid Delegation
+    // Crypto Grid Delegation (Accordion & Favorites)
     const grid = document.getElementById('crypto-grid');
     grid.addEventListener('click', (e) => {
         const card = e.target.closest('.card');
+        const starBtn = e.target.closest('.card__star');
+
         if (!card) return;
 
-        // Star Click
-        const starBtn = e.target.closest('.card__star');
+        // 1. Manejo de Favoritos (Estrella)
         if (starBtn) {
-            e.stopPropagation();
+            e.stopPropagation(); // Evitar que el clic llegue a la tarjeta y la expanda
             toggleFavorite(card.dataset.id);
-            return;
+            return; // Salir de la función aquí
         }
 
-        // Accordion Toggle (if not clicking calculator input)
-        if (!e.target.closest('.calculator__input')) {
+        // 2. Manejo de Acordeón (Expansión)
+        // Solo expandimos si NO se hizo clic en el panel de la calculadora ni en el input
+        if (card && !e.target.closest('.calculator')) {
+            const isExpanding = !card.classList.contains('card--expanded');
+
+            // [Opcional] Cerrar otras tarjetas abiertas antes de abrir la nueva (Efecto Pro)
+            if (isExpanding) {
+                document.querySelectorAll('.card--expanded').forEach(otherCard => {
+                    otherCard.classList.remove('card--expanded');
+                });
+            }
+
+            // Alternar la clase en la tarjeta actual
             card.classList.toggle('card--expanded');
         }
     });
