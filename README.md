@@ -58,4 +58,4 @@ npx serve .
 
 ---
 
-Desarrollado con ❤️ por un Senior Frontend Developer.
+Desarrollado con ❤️ por un Frontend Developer.
