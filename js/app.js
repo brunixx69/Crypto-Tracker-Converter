@@ -128,32 +128,33 @@ const setupEventListeners = () => {
     // Crypto Grid Delegation (Accordion & Favorites)
     const grid = document.getElementById('crypto-grid');
     grid.addEventListener('click', (e) => {
+        // Encontrar la tarjeta (card) más cercana
         const card = e.target.closest('.card');
-        const starBtn = e.target.closest('.card__star');
-
         if (!card) return;
 
-        // 1. Manejo de Favoritos (Estrella)
+        // Caso 1: Clic en la estrella de favoritos
+        const starBtn = e.target.closest('.card__star');
         if (starBtn) {
-            e.stopPropagation(); // Evitar que el clic llegue a la tarjeta y la expanda
+            e.stopPropagation();
             toggleFavorite(card.dataset.id);
-            return; // Salir de la función aquí
+            return;
         }
 
-        // 2. Manejo de Acordeón (Expansión)
-        // Solo expandimos si NO se hizo clic en el panel de la calculadora ni en el input
-        if (card && !e.target.closest('.calculator')) {
-            const isExpanding = !card.classList.contains('card--expanded');
+        // Caso 2: Clic en cualquier parte de la tarjeta para expandir
+        // Excluimos la calculadora para permitir interacción interna sin cerrar la tarjeta
+        if (!e.target.closest('.calculator')) {
+            const isAlreadyExpanded = card.classList.contains('card--expanded');
 
-            // [Opcional] Cerrar otras tarjetas abiertas antes de abrir la nueva (Efecto Pro)
-            if (isExpanding) {
-                document.querySelectorAll('.card--expanded').forEach(otherCard => {
-                    otherCard.classList.remove('card--expanded');
-                });
+            // 1. Cerrar TODAS las tarjetas que estén abiertas actualmente
+            document.querySelectorAll('.card--expanded').forEach(expandedCard => {
+                expandedCard.classList.remove('card--expanded');
+            });
+
+            // 2. Si la tarjeta clickeada no estaba abierta, la abrimos
+            // Esto asegura que si clickeas una abierta, se cierra (paso 1) y no se reabre
+            if (!isAlreadyExpanded) {
+                card.classList.add('card--expanded');
             }
-
-            // Alternar la clase en la tarjeta actual
-            card.classList.toggle('card--expanded');
         }
     });
 
