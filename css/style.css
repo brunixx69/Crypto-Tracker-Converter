@@ -184,6 +184,8 @@ h3 {
     display: grid;
     gap: var(--space-md);
     grid-template-columns: 1fr;
+    align-items: start;
+    /* Evita que las tarjetas de al lado se estiren cuando una se expande */
     /* Mobile first */
 }
 
