@@ -14,8 +14,8 @@ const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: value < 1 ? 4 : 2,
-        maximumFractionDigits: value < 1 ? 6 : 2
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     }).format(value);
 };
 
@@ -58,11 +58,12 @@ const createCardElement = (crypto, isFavorite) => {
 
         <div class="card__stats">
             <span class="card__change ${isPositive ? 'card__change--positive' : 'card__change--negative'}">
-                ${isPositive ? '↑' : '↓'} ${Math.abs(crypto.price_change_percentage_24h).toFixed(2)}%
+                <span class="trend-icon">${isPositive ? '↑' : '↓'}</span>
+                ${Math.abs(crypto.price_change_percentage_24h).toFixed(2)}%
             </span>
             <div class="card__cap">
-                <span class="card__symbol">Cap: </span>
-                <span>${(crypto.market_cap / 1e9).toFixed(2)}B</span>
+                <span class="card__symbol">Mkt Cap: </span>
+                <span>${formatCurrency(crypto.market_cap)}</span>
             </div>
         </div>
 
@@ -130,26 +131,26 @@ export function showLoading() {
     grid.innerHTML = '';
     const fragment = document.createDocumentFragment();
 
-    // Create 12 skeletons
+    // Create 12 skeletons with a refined pulse feel
     for (let i = 0; i < 12; i++) {
         const skeleton = document.createElement('div');
-        skeleton.className = 'card card--skeleton';
+        skeleton.className = 'card card--skeleton-loading';
         skeleton.innerHTML = `
             <div class="card__header">
                 <div class="card__info">
-                    <div class="skeleton skeleton--icon"></div>
+                    <div class="pulse-element pulse-element--icon"></div>
                     <div class="card__name-wrapper">
-                        <div class="skeleton skeleton--text" style="width: 80px"></div>
-                        <div class="skeleton skeleton--text" style="width: 40px"></div>
+                        <div class="pulse-element pulse-element--text" style="width: 100px"></div>
+                        <div class="pulse-element pulse-element--text" style="width: 60px"></div>
                     </div>
                 </div>
             </div>
             <div class="card__price-section">
-                <div class="skeleton skeleton--price"></div>
+                <div class="pulse-element pulse-element--price"></div>
             </div>
             <div class="card__stats">
-                <div class="skeleton skeleton--badge"></div>
-                <div class="skeleton skeleton--text" style="width: 60px"></div>
+                <div class="pulse-element pulse-element--badge"></div>
+                <div class="pulse-element pulse-element--text" style="width: 80px"></div>
             </div>
         `;
         fragment.appendChild(skeleton);

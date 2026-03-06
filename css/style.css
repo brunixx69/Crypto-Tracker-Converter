@@ -283,20 +283,29 @@ h3 {
 }
 
 .card__change {
-    font-weight: 600;
-    padding: 0.25rem 0.75rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: -0.2px;
+}
+
+.trend-icon {
+    font-size: 1.1rem;
+    line-height: 1;
 }
 
 .card__change--positive {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success);
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
 }
 
 .card__change--negative {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger);
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
 }
 
 /* ==========================================================================
@@ -453,61 +462,57 @@ h3 {
 }
 
 /* ==========================================================================
-   Skeleton Loaders & Animations
-   ========================================================================== */
-.card--skeleton {
+   Professional Pulse Skeletons
+   ========================================================================= */
+.card--skeleton-loading {
     pointer-events: none;
     border-color: var(--border-glass);
 }
 
-.skeleton {
-    background: var(--border-glass);
-    background-image: linear-gradient(90deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.05) 50%,
-            transparent 100%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite linear;
-    border-radius: 4px;
+.pulse-element {
+    background: rgba(148, 163, 184, 0.1);
+    border-radius: 6px;
+    animation: pulse-grey 1.5s ease-in-out infinite;
 }
 
-[data-theme="light"] .skeleton {
-    background-image: linear-gradient(90deg,
-            rgba(0, 0, 0, 0.05) 0%,
-            rgba(0, 0, 0, 0.1) 50%,
-            rgba(0, 0, 0, 0.05) 100%);
+[data-theme="light"] .pulse-element {
+    background: rgba(0, 0, 0, 0.05);
 }
 
-.skeleton--icon {
+.pulse-element--icon {
     width: 40px;
     height: 40px;
     border-radius: 50%;
 }
 
-.skeleton--text {
+.pulse-element--text {
     height: 12px;
     margin-bottom: 8px;
 }
 
-.skeleton--price {
+.pulse-element--price {
     height: 32px;
-    width: 60%;
+    width: 70%;
     margin: 0.5rem 0;
 }
 
-.skeleton--badge {
+.pulse-element--badge {
     height: 24px;
-    width: 50px;
+    width: 60px;
     border-radius: 10px;
 }
 
-@keyframes shimmer {
+@keyframes pulse-grey {
     0% {
-        background-position: -200% 0;
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 0.3;
     }
 
     100% {
-        background-position: 200% 0;
+        opacity: 0.6;
     }
 }
 

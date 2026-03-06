@@ -117,8 +117,11 @@ const toggleFavorite = (id) => {
  */
 const setupEventListeners = () => {
     // Search
-    searchInput.addEventListener('input', (e) => {
-        filterCryptos(e.target.value);
+    // Search (Reactive & Keyup for maximum compatibility)
+    ['input', 'keyup'].forEach(eventType => {
+        searchInput.addEventListener(eventType, (e) => {
+            filterCryptos(e.target.value);
+        });
     });
 
     // Theme
