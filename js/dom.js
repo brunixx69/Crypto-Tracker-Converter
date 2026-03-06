@@ -77,11 +77,16 @@ const createCardElement = (crypto, isFavorite) => {
             </div>
             
             <div class="calculator">
-                <span class="calculator__title">Calculadora de Conversión</span>
+                <span class="calculator__title">Calculadora Bidireccional</span>
                 <div class="calculator__input-group">
-                    <input type="number" class="calculator__input" placeholder="Cantidad ${crypto.symbol.toUpperCase()}" step="any" data-price="${crypto.current_price}">
-                    <span>=</span>
-                    <span class="calculator__result">$0.00 USD</span>
+                    <div class="calculator__field">
+                        <label class="calculator__label">${crypto.symbol.toUpperCase()}</label>
+                        <input type="number" class="calculator__input calculator__input--crypto" placeholder="0.00" step="any" data-price="${crypto.current_price}" data-type="crypto">
+                    </div>
+                    <div class="calculator__field">
+                        <label class="calculator__label">USD</label>
+                        <input type="number" class="calculator__input calculator__input--usd" placeholder="0.00" step="any" data-price="${crypto.current_price}" data-type="usd">
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,7 +113,9 @@ export function renderCryptos(cryptos, favorites = []) {
 
     sortedCryptos.forEach(crypto => {
         const isFavorite = favorites.includes(crypto.id);
-        fragment.appendChild(createCardElement(crypto, isFavorite));
+        const card = createCardElement(crypto, isFavorite);
+        if (isFavorite) card.classList.add('card--favorite');
+        fragment.appendChild(card);
     });
 
     grid.innerHTML = '';
@@ -173,8 +180,9 @@ export function showError(type = 'GENERAL') {
  * @param {string} searchTerm 
  */
 export function filterCryptos(searchTerm) {
-    const cards = grid.querySelectorAll('.card');
-    const term = searchTerm.toLowerCase();
+    const cards = grid.querySelectorAll('.card:not(.card--skeleton)');
+    const term = searchTerm.toLowerCase().trim();
+    let visibleCount = 0;
 
     cards.forEach(card => {
         const name = card.dataset.name;
@@ -182,8 +190,26 @@ export function filterCryptos(searchTerm) {
 
         if (name.includes(term) || symbol.includes(term)) {
             card.style.display = 'flex';
+            visibleCount++;
         } else {
             card.style.display = 'none';
         }
     });
+
+    // Handle empty state
+    let noResults = document.getElementById('no-results-msg');
+    if (visibleCount === 0 && term !== '') {
+        if (!noResults) {
+            noResults = document.createElement('div');
+            noResults.id = 'no-results-msg';
+            noResults.className = 'empty-state';
+            noResults.innerHTML = `
+                <p>No se encontraron resultados para "<strong>${searchTerm}</strong>"</p>
+                <button class="btn btn--primary" onclick="document.getElementById('search-input').value = ''; document.getElementById('search-input').dispatchEvent(new Event('input'))">Limpiar búsqueda</button>
+            `;
+            grid.appendChild(noResults);
+        }
+    } else if (noResults) {
+        noResults.remove();
+    }
 }

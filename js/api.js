@@ -11,11 +11,13 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
  * @returns {Promise<Array>} List of crypto data
  */
 export async function fetchTopCryptos() {
-    // Check Cache first
+    // Check Cache first - now use a shorter TTL for real-time updates (60s)
+    const CACHE_TTL_REFRESH = 55 * 1000; // slightly less than 60s to ensure fresh data
     const cached = sessionStorage.getItem(CACHE_KEY);
+
     if (cached) {
         const { data, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < CACHE_TTL) {
+        if (Date.now() - timestamp < CACHE_TTL_REFRESH) {
             console.log('Serving from cache...');
             return data;
         }
@@ -29,10 +31,15 @@ export async function fetchTopCryptos() {
         }
 
         if (!response.ok) {
-            throw new Error(`API Error: ${response.status}`);
+            throw new Error(`API_ERROR_${response.status}`);
         }
 
         const data = await response.json();
+
+        // Basic validation
+        if (!Array.isArray(data) || data.length === 0) {
+            throw new Error('INVALID_DATA');
+        }
 
         // Save to cache
         sessionStorage.setItem(CACHE_KEY, JSON.stringify({
@@ -42,7 +49,15 @@ export async function fetchTopCryptos() {
 
         return data;
     } catch (error) {
-        console.error('Error fetching data from CoinGecko:', error);
+        console.error('Error fetching data from CoinGecko:', error.message);
         throw error;
     }
 }
+/**
+ * Formats a number as USD currency
+ * @param {number} price 
+ * @returns {string}
+ */
+export const formatCurrency = (price) => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+};

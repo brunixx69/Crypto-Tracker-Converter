@@ -322,6 +322,12 @@ h3 {
     fill: #fbbf24;
 }
 
+.card--favorite {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, var(--bg-glass) 0%, rgba(99, 102, 241, 0.05) 100%);
+    box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.2);
+}
+
 .card__details {
     max-height: 0;
     overflow: hidden;
@@ -360,27 +366,49 @@ h3 {
 }
 
 .calculator__title {
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: var(--space-xs);
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
     display: block;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .calculator__input-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+    align-items: end;
+}
+
+.calculator__field {
     display: flex;
-    gap: var(--space-xs);
-    align-items: center;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.calculator__label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
 }
 
 .calculator__input {
-    flex: 1;
     background: var(--bg-app);
     border: 1px solid var(--border-glass);
     border-radius: 8px;
-    padding: 0.5rem;
+    padding: 0.6rem;
     color: var(--text-main);
     font-size: 0.9rem;
     width: 100%;
+    transition: border-color 0.2s ease;
+}
+
+.calculator__input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.05);
 }
 
 /* ==========================================================================
@@ -391,32 +419,36 @@ h3 {
 }
 
 .price-up {
-    animation: flash-green 0.5s ease;
+    animation: flash-green-premium 1s ease;
     color: var(--success) !important;
 }
 
 .price-down {
-    animation: flash-red 0.5s ease;
+    animation: flash-red-premium 1s ease;
     color: var(--danger) !important;
 }
 
-@keyframes flash-green {
+@keyframes flash-green-premium {
     0% {
-        background: rgba(16, 185, 129, 0.2);
+        background: rgba(16, 185, 129, 0.3);
+        transform: scale(1.05);
     }
 
     100% {
         background: transparent;
+        transform: scale(1);
     }
 }
 
-@keyframes flash-red {
+@keyframes flash-red-premium {
     0% {
-        background: rgba(239, 68, 68, 0.2);
+        background: rgba(239, 68, 68, 0.3);
+        transform: scale(1.05);
     }
 
     100% {
         background: transparent;
+        transform: scale(1);
     }
 }
 

@@ -162,15 +162,21 @@ const setupEventListeners = () => {
     grid.addEventListener('input', (e) => {
         if (e.target.classList.contains('calculator__input')) {
             const input = e.target;
-            const amount = parseFloat(input.value) || 0;
+            const value = parseFloat(input.value) || 0;
             const price = parseFloat(input.dataset.price);
-            const resultEl = input.parentElement.querySelector('.calculator__result');
+            const type = input.dataset.type;
+            const card = input.closest('.card');
 
-            const total = amount * price;
-            resultEl.textContent = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            }).format(total);
+            const cryptoInput = card.querySelector('.calculator__input--crypto');
+            const usdInput = card.querySelector('.calculator__input--usd');
+
+            if (type === 'crypto') {
+                // Crypto to USD
+                usdInput.value = (value * price).toFixed(2);
+            } else {
+                // USD to Crypto
+                cryptoInput.value = (value / price).toFixed(6);
+            }
         }
     });
 };
@@ -178,7 +184,7 @@ const setupEventListeners = () => {
 // Auto-refresh every 2 minutes if the user is active
 setInterval(() => {
     if (!document.hidden) initAppData();
-}, 120000);
+}, 60000);
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
